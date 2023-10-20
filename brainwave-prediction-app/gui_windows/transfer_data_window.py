@@ -24,7 +24,7 @@ def transfer_data_window():
     layout = [
         [sg.Frame("Login", login_layout)],
         [sg.Text("No Folder Selected")],
-        [sg.FileBrowse("Select Folder"),
+        [sg.FolderBrowse(target='input', key='target'),
          sg.Push(),
          sg.Button("Send"),
          sg.Button("Cancel")],
