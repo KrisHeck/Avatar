@@ -7,6 +7,7 @@ from client.brainflow1 import bciConnection
 
 from gui_windows.manual_drone_control_window import Drone_Control
 from gui_windows.brainwave_prediction_window import Brainwaves
+from gui_windows.transfer_data_window import TransferTab
 
 
 # TODO enable imports
@@ -146,8 +147,8 @@ def holding_pattern_window():
 brainwaveObj = Brainwaves(get_drone_action)
 brainwave_tab = brainwaveObj.brainwave_prediction_window(get_drone_action, use_brainflow)
 
-t2Test = sg.Text('Disabled for now',text_color='Red')
-transferTab = [[t2Test]]
+transferObj = TransferTab()
+transfer_tab = transferObj.transfer_data_window()
 
 DroneControlObj = Drone_Control()
 manDroneCtrlTab = DroneControlObj.manual_drone_control_window(get_drone_action)
@@ -158,7 +159,7 @@ holdPatTab = [[t4Test]]
 #new layout designed
 layout1 = [[sg.TabGroup([[
     brainwave_tab,
-    sg.Tab('Transfer Data', transferTab, key='Transfer Data'),
+    transfer_tab,
     manDroneCtrlTab,
     sg.Tab('Holding Pattern', holdPatTab,key='Holding Pattern')]],
     key='layout1',enable_events=True)]]
@@ -170,15 +171,9 @@ OLDlayout1 = [
      sg.Button('Holding Pattern', size=(20, 3), disabled=True)]
 ]
 
-# Define the layout for the Transfer Data Page
-layout4 = [[sg.Button(
-    image_filename="/Users/williamdoyle/Documents/GitHub/Avatar/brainwave-prediction-app/images")]]
-
 # Create the windows
 window1 = sg.Window('Start Page', layout1, size=(1600,1600),element_justification='c',resizable=True,finalize=True)
 window1.Maximize()
-window4 = sg.Window('Transfer Data', layout4, size=(
-    1200, 800), element_justification='c')
 
 # Event loop for the first window
 #changed what the buttons do to tabs
@@ -189,9 +184,8 @@ while True:
         break
     elif activeTab == 'Brainwave Reading':
         brainwaveObj.buttonLoop(window1, event1, values1, get_drone_action, use_brainflow)
-    #elif activeTab == 'Transfer Data':
-        #window1.hide()
-        #window4.read()
+    elif activeTab == 'Transfer Data':
+        transferObj.buttonLoop(event1, values1)
     elif activeTab == 'Manual Drone Control':
         #window1.hide()
         DroneControlObj.buttonLoopDrone(get_drone_action, window1, event1, values1)
